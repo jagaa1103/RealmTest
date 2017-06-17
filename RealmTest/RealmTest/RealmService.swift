@@ -23,11 +23,19 @@ class RealmService: NSObject {
         user.id = id
         user.name = name
         try! realm.write(){
-            realm.create(User.self, value: user)
+//            realm.create(User.self, value: user)
+            realm.add(user)
         }
+        
     }
     
     func getUserList() -> Results<User>{
         return realm.objects(User.self)
+    }
+    
+    func deleteUser(user: User){
+        try! realm.write {
+            realm.delete(user)
+        }
     }
 }

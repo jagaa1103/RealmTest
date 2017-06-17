@@ -25,10 +25,24 @@ class UserTable: UITableView, UITableViewDataSource, UITableViewDelegate {
         self.delegate = self
         self.dataSource = self
         self.tableSize = frame
+        
+        let recog = UISwipeGestureRecognizer(target: self, action: Selector(("swipedOnTable")))
+//        let recog = UISwipeGestureRecognizer(target: self, action: Selector("swipedTableCell"))
+        self.addGestureRecognizer(recog)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    func swipedOnTable(recognizer: UIGestureRecognizer){
+        if recognizer.state == UIGestureRecognizerState.ended {
+            let location = recognizer.location(in: self)
+            if let swipedCellIndex = self.indexPathForRow(at: location){
+                print(self.users[swipedCellIndex.row].id)
+            }
+        }
     }
 
     
@@ -45,7 +59,8 @@ class UserTable: UITableView, UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.item)
+//        RealmService.instance.deleteUser(user: users[indexPath.row])
+        tableView.reloadData()
     }
 
 }
